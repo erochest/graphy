@@ -8,6 +8,7 @@ pylint = "*"
 flake8 = "*"
 autopep8 = "*"
 python-dotenv = "*"
+rope = "*"
 
 [packages]
 graphene = ">=2.0"
