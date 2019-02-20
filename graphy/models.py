@@ -1,10 +1,12 @@
+from enum import Enum
+
 from sqlalchemy import Column, String, Integer, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 from graphy.db import Base
 
 
-class AccountType:
+class AccountType(Enum):
     SAVINGS = 0
     CHECKING = 1
     CD = 2
