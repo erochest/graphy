@@ -3,10 +3,8 @@ from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from flask_graphql import GraphQLView
 
-
-from .db import Session
 from .models import (
-    Customer as CustomerModel, Account as AccountModel, AccountType,
+    Customer as CustomerModel, Account as AccountModel,
 )
 
 

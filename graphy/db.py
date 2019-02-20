@@ -23,3 +23,57 @@ def init_app(app):
 
 def shutdown_session(exception=None):
     Session.remove()
+
+
+def populate():
+    import os
+    import random
+    from faker import Faker
+    from .models import Account, Customer
+
+    class App:
+        env = 'development'
+        config = {
+            'DATABASE_URL': os.getenv('DATABASE_URL')
+        }
+
+        def teardown_appcontext(self, fn):
+            pass
+
+    app = App()
+    init_app(app)
+
+    faker = Faker()
+    n = 12
+
+    session = Session()
+    try:
+        customers = []
+        for _ in range(n):
+            customer = Customer(name=faker.name())
+            session.add(customer)
+            customers.append(customer)
+        for _ in range(n * 3):
+            owner_index = random.randrange(n)
+            bene_index = set()
+            target_size = random.randrange(4)
+            while len(bene_index) < target_size:
+                i = random.randrange(len(customers))
+                if i != owner_index:
+                    bene_index.add(i)
+            account = Account(
+                number=faker.ean8(),
+                account_type=random.randrange(3),
+                owner=customers[owner_index],
+                beneficiaries=[customers[i] for i in bene_index],
+            )
+            session.add(account)
+    except:    # noqa: E722
+        session.rollback()
+        raise
+    else:
+        session.commit()
+
+
+if __name__ == '__main__':
+    populate()
